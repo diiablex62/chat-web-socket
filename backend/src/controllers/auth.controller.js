@@ -109,8 +109,16 @@ export const updateProfile = async (req, res) => {
     );
 
     res.status(200).json(updatedUser);
-    
+
   } catch (error) {
     console.log("Error in updateProfile controller", error);
+  }
+};
+
+export const checkAuthentication = (req, res) => {
+  try {
+    res.status(200).json(user);
+  } catch (error) {
+    console.log("Error in checkAuthentication controller", error);
   }
 };
