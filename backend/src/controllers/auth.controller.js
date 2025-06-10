@@ -90,3 +90,6 @@ try {
     console.log("Error in logout controller", error);
   }
 };
+
+export const updateProfile = (req, res) => {}
+
