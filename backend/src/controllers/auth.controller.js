@@ -79,4 +79,14 @@ export const login = async (req, res) => {
   }
 };
 
-export const logout = (req, res) => {};
+export const logout = (req, res) => {
+try {
+    res.cookie("jwt", "", {
+      httpOnly: true,
+      maxAge: 0,
+    });
+    res.status(200).json({ message: "Déconnexion réussie" });
+} catch (error) {
+    console.log("Error in logout controller", error);
+  }
+};
