@@ -50,7 +50,6 @@ export const signup = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-
   const { email, password } = req.body;
 
   try {
@@ -69,27 +68,25 @@ export const login = async (req, res) => {
     generateToken(user._id, res);
     res.status(201).json({
       _id: user._id,
-        fullName: user.fullName,
+      fullName: user.fullName,
       email: user.email,
       profileAvatar: user.profileAvatar,
     });
-
   } catch (error) {
     console.log("Error in login controller", error);
   }
 };
 
 export const logout = (req, res) => {
-try {
+  try {
     res.cookie("jwt", "", {
       httpOnly: true,
       maxAge: 0,
     });
     res.status(200).json({ message: "Déconnexion réussie" });
-} catch (error) {
+  } catch (error) {
     console.log("Error in logout controller", error);
   }
 };
 
-export const updateProfile = (req, res) => {}
-
+export const updateProfile = (req, res) => {};  
