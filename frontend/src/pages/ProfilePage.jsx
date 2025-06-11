@@ -32,7 +32,7 @@ function ProfilePage() {
           <div className='flex flex-col items-center gap-4'>
             <div className='relative'>
               <img
-                src={selectedImage || authUser.profileAvatar || "/bounty.jpg"}
+                src={selectedImage || authUser.profileAvatar || "/avatar.png"}
                 alt='Profile'
                 className='size-32 rounded-full object-cover border-4'
               />
