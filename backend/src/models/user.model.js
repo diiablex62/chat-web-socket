@@ -14,15 +14,18 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
-      minlength: 5,
+      minLength: 5,
     },
     profileAvatar: {
       type: String,
       default: "",
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 const User = mongoose.model("User", userSchema);
+
 export default User;
