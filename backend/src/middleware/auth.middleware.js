@@ -6,28 +6,30 @@ export const protectRoute = async (req, res, next) => {
     const token = req.cookies.jwt;
 
     if (!token) {
-      return res.status(401).json({ message: "Non autorisé, pas de token ! " });
+      return res.status(400).json({
+        message: "Interdit ! Pas de token",
+      });
     }
 
     const decodedToken = jsonwebtoken.verify(token, process.env.SECRET_KEY);
 
     if (!decodedToken) {
-      return res
-        .status(400)
-        .json({ message: "Non autorisé, token invalide ! " });
+      return res.status(400).json({
+        message: "Interdit ! Token invalide",
+      });
     }
 
     const user = await User.findById(decodedToken.userId).select("-password");
 
     if (!user) {
-      return res
-        .status(400)
-        .json({ message: "Non autorisé, utilisateur non trouvé ! " });
+      return res.status(400).json({
+        message: "Utilisateur inconnu",
+      });
     }
 
     req.user = user;
     next();
   } catch (error) {
-    console.log("Error in protectRoute middleware", error);
+    console.log("error in protect route middleware", error);
   }
 };

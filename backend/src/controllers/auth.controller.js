@@ -1,3 +1,4 @@
+import cloudinary from "../lib/cloudinary.js";
 import { generateToken } from "../lib/utils.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
@@ -56,15 +57,18 @@ export const login = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(400).json({ message: "Utilisateur non trouvé" });
+      return res.status(400).json({
+        message: "Données utilisateur invalides",
+      });
     }
 
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
     if (!isPasswordCorrect) {
-      return res.status(400).json({ message: "Mot de passe incorrect" });
+      return res.status(400).json({
+        message: "Données utilisateur invalides",
+      });
     }
-
     generateToken(user._id, res);
     res.status(201).json({
       _id: user._id,
@@ -80,10 +84,11 @@ export const login = async (req, res) => {
 export const logout = (req, res) => {
   try {
     res.cookie("jwt", "", {
-      httpOnly: true,
       maxAge: 0,
     });
-    res.status(200).json({ message: "Déconnexion réussie" });
+    res.status(200).json({
+      message: "Déconnexion réussie",
+    });
   } catch (error) {
     console.log("Error in logout controller", error);
   }
@@ -95,7 +100,9 @@ export const updateProfile = async (req, res) => {
     const userId = req.user._id;
 
     if (!profileAvatar) {
-      return res.status(400).json({ message: "L'avatar est requis" });
+      return res.status(400).json({
+        message: "L'avatar est requis",
+      });
     }
 
     const uploadResponse = await cloudinary.uploader.upload(profileAvatar);
@@ -105,20 +112,21 @@ export const updateProfile = async (req, res) => {
       {
         profileAvatar: uploadResponse.secure_url,
       },
-      { new: true }
+      {
+        new: true,
+      }
     );
 
     res.status(200).json(updatedUser);
-
   } catch (error) {
-    console.log("Error in updateProfile controller", error);
+    console.log("error in update profile", error);
   }
 };
 
-export const checkAuthentication = (req, res) => {
+export const checkAuthentification = (req, res) => {
   try {
-    res.status(200).json(user);
+    res.status(200).json(req.user);
   } catch (error) {
-    console.log("Error in checkAuthentication controller", error);
+    console.log("error in check auth", error);
   }
 };

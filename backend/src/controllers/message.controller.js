@@ -1,6 +1,6 @@
-import User from "../models/user.model.js";
 import Message from "../models/message.model.js";
-import cloudinary from "cloudinary";
+import User from "../models/user.model.js";
+import cloudinary from "../lib/cloudinary.js";
 
 export const getUsersForSidebar = async (req, res) => {
   try {
@@ -11,7 +11,7 @@ export const getUsersForSidebar = async (req, res) => {
 
     res.status(200).json(filteredUsers);
   } catch (error) {
-    console.log("Error in getUsersForSidebar controller", error);
+    console.log("error in get users for sidebar", error);
   }
 };
 
@@ -19,6 +19,7 @@ export const getMessages = async (req, res) => {
   try {
     const { id: receiverUserId } = req.params;
     const myId = req.user._id;
+
     const messages = await Message.find({
       $or: [
         { senderId: myId, receiverId: receiverUserId },
@@ -28,7 +29,7 @@ export const getMessages = async (req, res) => {
 
     res.status(200).json(messages);
   } catch (error) {
-    console.log("Error in getMessages controller", error);
+    console.log("error in get all messages", error);
   }
 };
 
@@ -53,9 +54,8 @@ export const sendMessage = async (req, res) => {
     });
 
     await newMessage.save();
-
     res.status(201).json(newMessage);
   } catch (error) {
-    console.log("Error in sendMessage controller", error);
+    console.log("error in send a message", error);
   }
 };
