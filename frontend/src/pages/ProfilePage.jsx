@@ -2,24 +2,7 @@ import { useAuthStore } from "../store/useAuthStore";
 import { Camera, Mail, User } from "lucide-react";
 import { useState } from "react";
 
-// Fonction pour compresser l'image
-const compressImage = (base64String, maxWidth = 800) => {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.src = base64String;
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      const scale = Math.min(1, maxWidth / img.width);
-      canvas.width = img.width * scale;
-      canvas.height = img.height * scale;
 
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-      resolve(canvas.toDataURL("image/jpeg", 0.7));
-    };
-  });
-};
 
 function ProfilePage() {
   const { authUser, isUpdatingProfile, updateProfile } = useAuthStore();
@@ -33,9 +16,8 @@ function ProfilePage() {
     reader.readAsDataURL(file);
     reader.onload = async () => {
       const base64Image = reader.result;
-      const compressedImage = await compressImage(base64Image);
-      setSelectedImage(compressedImage);
-      await updateProfile({ profileAvatar: compressedImage });
+      setSelectedImage(base64Image);
+      await updateProfile({ profileAvatar: base64Image });
     };
   };
 
