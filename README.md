@@ -1,4 +1,4 @@
-# Chat Web Socket - Application de Chat en Temps Réel
+# Chat web socket - Application de chat en temps réel
 
 Une application de chat moderne et interactive construite avec React, Node.js et Socket.IO, permettant aux utilisateurs de communiquer en temps réel avec des fonctionnalités avancées.
 
@@ -14,7 +14,7 @@ Une application de chat moderne et interactive construite avec React, Node.js et
 - 📸 Partage d'images
 - 🔒 Authentification sécurisée
 
-## 🛠️ Technologies Utilisées
+## 🛠️ Technologies utilisées
 
 ### Frontend
 
