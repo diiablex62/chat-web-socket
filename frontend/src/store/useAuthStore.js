@@ -6,17 +6,16 @@ import { io } from "socket.io-client";
 
 const BASE_SOCKET_URL = "http://localhost:5000";
 
-// ce code sert à créer le store pour l'authentification
 export const useAuthStore = create((set, get) => ({
   authUser: null,
   isSigningUp: false,
   isLoggingIn: false,
   isUpdatingProfile: false,
-  isCheckingAuth: true,
   onlineUsers: [],
   socket: null,
 
-  // ce code sert à vérifier si l'utilisateur est connecté
+  isCheckingAuth: true,
+
   checkAuth: async () => {
     try {
       const res = await axiosInstance.get("/auth/check");
@@ -32,10 +31,10 @@ export const useAuthStore = create((set, get) => ({
 
   signUp: async (dataOfTheForm) => {
     set({ isSigningUp: true });
-    get().connectSocket();
     try {
       const res = await axiosInstance.post("/auth/signup", dataOfTheForm);
       set({ authUser: res.data });
+      get().connectSocket();
       toast.success("Account created successfully");
     } catch (error) {
       console.log("Error in signup", error);
@@ -47,10 +46,10 @@ export const useAuthStore = create((set, get) => ({
 
   login: async (dataOfTheForm) => {
     set({ isLoggingIn: true });
-    get().connectSocket();
     try {
       const res = await axiosInstance.post("/auth/login", dataOfTheForm);
       set({ authUser: res.data });
+      get().connectSocket();
       toast.success("Logged in successfully");
     } catch (error) {
       console.log("Error in login", error);
@@ -64,8 +63,8 @@ export const useAuthStore = create((set, get) => ({
     try {
       await axiosInstance.post("/auth/logout");
       set({ authUser: null });
-      get().disconnectSocket();
       useChatStore.getState().setSelectedUser(null);
+      get().disconnectSocket();
       toast.success("Logged out successfully");
     } catch (error) {
       console.log("Error in logout", error);
@@ -87,12 +86,15 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
-// ce code sert à connecter le socket à l'application
   connectSocket: () => {
     const { authUser } = get();
     if (!authUser || get().socket?.connected) return;
 
-    const socket = io(BASE_SOCKET_URL);
+    const socket = io(BASE_SOCKET_URL, {
+      query: {
+        userId: authUser._id,
+      },
+    });
     socket.connect();
     set({ socket: socket });
 
@@ -100,8 +102,8 @@ export const useAuthStore = create((set, get) => ({
       set({ onlineUsers: userIds });
     });
   },
+
   disconnectSocket: () => {
     if (get().socket?.connected) get().socket.disconnect();
   },
-
 }));
