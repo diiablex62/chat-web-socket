@@ -38,3 +38,25 @@ Une application de chat moderne et interactive construite avec React, Node.js et
 - [JWT](https://jwt.io/) - Authentification
 - [Cloudinary](https://cloudinary.com/) - Stockage d'images
 - [Bcrypt](https://github.com/dcodeIO/bcrypt.js/) - Hachage des mots de passe
+
+## 🔒 Variables d'environnement
+
+### Backend (.env)
+
+```env
+MONGODB_URI=...
+PORT=5001
+JWT_SECRET=...
+
+CLOUDINARY_CLOUD_NAME=...
+CLOUDINARY_API_KEY=...
+CLOUDINARY_API_SECRET=...
+
+NODE_ENV=development
+```
+
+### Frontend (.env)
+
+```env
+VITE_API_URL=http://localhost:5001/api
+```
